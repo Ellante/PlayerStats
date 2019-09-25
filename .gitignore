@@ -6,3 +6,5 @@ PlayerStats/bin/
 PlayerStats/obj/
 
 PlayerStats.Tests/bin/
+
+.vs/
