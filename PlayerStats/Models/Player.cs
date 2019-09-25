@@ -16,4 +16,9 @@ namespace PlayerStats.Models
 		public string picture { get; set; }
 		public PlayerData data { get; set; }
 	}
+
+	public class PlayerList
+	{
+		public List<Player> Players { get; set; }
+	}
 }
