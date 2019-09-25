@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using PlayerStats.Controllers;
 using PlayerStats.Models;
 
