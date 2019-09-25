@@ -42,5 +42,19 @@ namespace PlayerStats.Controllers
 			var players = GetPlayersFromFile();
 			return Request.CreateResponse(players.OrderBy(p => p.id));
 		}
+
+		[HttpGet]
+		[Route("api/players/{id}")]
+		public HttpResponseMessage GetPlayer(int id)
+		{
+			var players = GetPlayersFromFile();
+			var player = players.FirstOrDefault(p => p.id == id);
+
+			if (player == null)
+				return Request.CreateErrorResponse(System.Net.HttpStatusCode.NotFound,
+					$"The player of id {id} does not exist.");
+
+			return Request.CreateResponse(player);
+		}
 	}
 }

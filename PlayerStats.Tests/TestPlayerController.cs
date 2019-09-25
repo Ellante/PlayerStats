@@ -13,20 +13,43 @@ namespace PlayerStats.Tests
 	[TestClass]
 	public class TestPlayerController
 	{
-		//NOTE: Add full path to headtohead.json file here
-		string _testPathToDataFile = "";
+		private PlayerController GetPlayerController()
+		{
+			//NOTE: Add full path to headtohead.json file here
+			var _testPathToDataFile = "";
+			var playerController = new PlayerController(_testPathToDataFile);
+			playerController.Request = new HttpRequestMessage();
+			playerController.Configuration = new HttpConfiguration();
+			return playerController;
+		}
 
 		[TestMethod]
 		public void PlayerController_GetAllPlayers_ShouldReturnPlayers()
 		{
-			var playerController = new PlayerController(_testPathToDataFile);
-			playerController.Request = new HttpRequestMessage();
-			playerController.Configuration = new HttpConfiguration();
-
+			var playerController = GetPlayerController();
 			var response = playerController.GetAllPlayers();
 			IEnumerable<Player> players;
 			Assert.IsTrue(response.TryGetContentValue<IEnumerable<Player>>(out players));
 		}
 
+		[TestMethod]
+		public void PlayerController_GetPlayer_ShouldFindPlayerOfRequestedId()
+		{
+			var requestedId = 52;
+			var playerController = GetPlayerController();
+			var response = playerController.GetPlayer(requestedId);
+			Player player;
+			Assert.IsTrue(response.TryGetContentValue<Player>(out player));
+			Assert.AreEqual(player.id, requestedId);
+		}
+
+		[TestMethod]
+		public void PlayerController_GetPlayer_ShouldReturn404Error()
+		{
+			var requestedId = 1;
+			var playerController = GetPlayerController();
+			var response = playerController.GetPlayer(requestedId);
+			Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
+		}
 	}
 }
