@@ -8,3 +8,5 @@ PlayerStats/obj/
 PlayerStats.Tests/bin/
 
 .vs/
+
+packages/
