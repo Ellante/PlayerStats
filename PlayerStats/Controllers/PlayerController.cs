@@ -56,5 +56,29 @@ namespace PlayerStats.Controllers
 
 			return Request.CreateResponse(player);
 		}
+
+		[HttpDelete]
+		[Route("api/players/{id}")]
+		public HttpResponseMessage DeletePlayer(int id)
+		{
+			var players = GetPlayersFromFile();
+			var player = players.FirstOrDefault(p => p.id == id);
+
+			if (player == null)
+				return Request.CreateErrorResponse(System.Net.HttpStatusCode.NotFound,
+					$"The player of id {id} does not exist.");
+
+			var root = new
+			{
+				players = players.Where(p => p.id != id)
+			};
+
+			using(StreamWriter file = new StreamWriter(_pathToDataFile))
+			{
+				file.WriteLine(JsonConvert.SerializeObject(root));
+			}
+
+			return Request.CreateResponse(System.Net.HttpStatusCode.OK);
+		}
 	}
 }

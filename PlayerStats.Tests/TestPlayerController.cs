@@ -16,8 +16,8 @@ namespace PlayerStats.Tests
 		private PlayerController GetPlayerController()
 		{
 			//NOTE: Add full path to headtohead.json file here
-			var _testPathToDataFile = "";
-			var playerController = new PlayerController(_testPathToDataFile);
+			var testPathToDataFile = "";
+			var playerController = new PlayerController(testPathToDataFile);
 			playerController.Request = new HttpRequestMessage();
 			playerController.Configuration = new HttpConfiguration();
 			return playerController;
@@ -44,11 +44,36 @@ namespace PlayerStats.Tests
 		}
 
 		[TestMethod]
-		public void PlayerController_GetPlayer_ShouldReturn404Error()
+		public void PlayerController_GetPlayer_ShouldReturn404ErrorForNonExistentPlayer()
 		{
 			var requestedId = 1;
 			var playerController = GetPlayerController();
 			var response = playerController.GetPlayer(requestedId);
+			Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
+		}
+
+		[TestMethod]
+		public void PlayerController_DeletePlayer_ShouldDeletePlayerFromPlayerList()
+		{
+			var toDeleteId = 95;
+			var playerController = GetPlayerController();
+
+			var getToDeletePlayerResponse = playerController.GetPlayer(toDeleteId);
+			Assert.IsTrue(getToDeletePlayerResponse.StatusCode == System.Net.HttpStatusCode.OK);
+
+			var deletePlayerResponse = playerController.DeletePlayer(toDeleteId);
+			Assert.IsTrue(deletePlayerResponse.StatusCode == System.Net.HttpStatusCode.OK);
+
+			var getDeletedPlayerResponse = playerController.GetPlayer(toDeleteId);
+			Assert.IsTrue(getDeletedPlayerResponse.StatusCode == System.Net.HttpStatusCode.NotFound);
+		}
+
+		[TestMethod]
+		public void PlayerController_DeletePlayer_ShouldReturn404ErrorForNonExistentPlayer()
+		{
+			var toDeleteId = 1;
+			var playerController = GetPlayerController();
+			var response = playerController.DeletePlayer(toDeleteId);
 			Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.NotFound);
 		}
 	}

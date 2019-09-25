@@ -19,6 +19,6 @@ namespace PlayerStats.Models
 
 	public class PlayerList
 	{
-		public List<Player> Players { get; set; }
+		public IEnumerable<Player> Players { get; set; }
 	}
 }
